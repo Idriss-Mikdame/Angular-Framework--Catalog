@@ -1,0 +1,38 @@
+<div class="container">
+    <ng-template #errors>
+      <div class="text-danger">{{errMessage}}</div>
+    </ng-template>
+    <div class="card" *ngIf="products; else errors">
+      <div class="card-header">Products List</div>
+      <div class="card-body">
+        <table class="table">
+          <thead>
+              <tr>
+                <th>ID</th><th>Products</th><th>Price</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let products of products">
+                <td>{{products.id}}</td>
+                <td>{{products.name}}</td>
+                <td>{{products.price}}</td>
+                <td class="text-success">
+                  <i *ngIf="products.promotion == true" class="bi bi-suit-heart-fill"></i>
+                </td>
+                <td>
+                  <button (click)="handelselectPromotion(products)" [ngClass]="products.promotion==true?'btn-danger':'btn-success'" class="btn">
+                    <span *ngIf="products.promotion==true">Promo Off</span>
+                    <span *ngIf="products.promotion==false">Promo on</span>
+                  </button>
+                </td>
+                <td>
+                  <button (click)="handelDeleteProduct(products)"
+                    class="btn btn-danger">
+                    <i class="bi bi-trash"></i></button>
+                </td>
+              </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+</div>
