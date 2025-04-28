@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ProductService} from '../services/product.service';
 import {Product} from '../Model/product.model';
+import {FormBuilder, FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-products',
@@ -10,13 +11,32 @@ import {Product} from '../Model/product.model';
 export class ProductsComponent implements OnInit{
 
   products! : Array<Product>
+  currentPage : number=0;
+  pageSize: number = 5;
+  totalPages : number = 0;
   errMessage!:string;
-  constructor(private productsSevices:ProductService) {
+  searchFormGroup! : FormGroup;
+
+  constructor(private productsSevices:ProductService,private fb:FormBuilder) {
   }
 
   ngOnInit(): void {
-  this.handleGetAllProDuct()
+    this.searchFormGroup = this.fb.group({
+       keyword  : this.fb.control(null),
+    });
+    this.handleGetPageProDuct()
 
+  }
+  handleGetPageProDuct(){
+    this.productsSevices.getPageProducts(this.currentPage,this.pageSize).subscribe({
+      next:(data)=>{
+        this.products = data.products;
+        this.totalPages = data.totalPages
+      },
+      error:(err)=>{
+        this.errMessage = err
+      }
+    })
   }
 
   handleGetAllProDuct(){
@@ -52,5 +72,20 @@ export class ProductsComponent implements OnInit{
         this.errMessage =err
       }
     })
+  }
+
+  handleSearchProducts() {
+    let keyword = this.searchFormGroup.value.keyword;
+    this.productsSevices.searchProducts(keyword,this.currentPage,this.pageSize).subscribe({
+      next:(data)=>{
+        this.products = data.products
+        this.totalPages = data.totalPages
+      }
+    })
+  }
+
+  gptoPage(i: number) {
+    this.currentPage = i
+    this.handleGetPageProDuct()
   }
 }
