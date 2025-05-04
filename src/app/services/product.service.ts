@@ -53,7 +53,7 @@ export class ProductService {
     let totalPages = ~~(result.length/size)
     if (this.products.length % size !=0)
       totalPages++
-    let pageProducts = this.products.slice(index,index+size);
+    let pageProducts =  result.slice(index,index+size);
     return of({page:page,size:size,totalPages:totalPages,products:pageProducts})
   }
 }

@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ProductService} from '../services/product.service';
 import {Product} from '../Model/product.model';
 import {FormBuilder, FormGroup} from '@angular/forms';
+import {AuthentificationService} from '../services/authentification.service';
 
 @Component({
   selector: 'app-products',
@@ -16,8 +17,9 @@ export class ProductsComponent implements OnInit{
   totalPages : number = 0;
   errMessage!:string;
   searchFormGroup! : FormGroup;
+  currentAction : string = "all"
 
-  constructor(private productsSevices:ProductService,private fb:FormBuilder) {
+  constructor(private productsSevices:ProductService,private fb:FormBuilder,public AuthService:AuthentificationService) {
   }
 
   ngOnInit(): void {
@@ -75,6 +77,7 @@ export class ProductsComponent implements OnInit{
   }
 
   handleSearchProducts() {
+    this.currentAction = "search";
     let keyword = this.searchFormGroup.value.keyword;
     this.productsSevices.searchProducts(keyword,this.currentPage,this.pageSize).subscribe({
       next:(data)=>{
@@ -86,6 +89,9 @@ export class ProductsComponent implements OnInit{
 
   gptoPage(i: number) {
     this.currentPage = i
+    if (this.currentAction=="all")
     this.handleGetPageProDuct()
+    else
+      this.handleSearchProducts();
   }
 }

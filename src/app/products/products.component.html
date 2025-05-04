@@ -26,13 +26,13 @@
                 <td class="text-success">
                   <i *ngIf="products.promotion == true" class="bi bi-suit-heart-fill"></i>
                 </td>
-                <td>
+                <td *ngIf="AuthService.hasRole('ADMIN')">
                   <button (click)="handelselectPromotion(products)" [ngClass]="products.promotion==true?'btn-danger':'btn-success'" class="btn">
                     <span *ngIf="products.promotion==true">Promo Off</span>
                     <span *ngIf="products.promotion==false">Promo on</span>
                   </button>
                 </td>
-                <td>
+                <td *ngIf="AuthService.hasRole('ADMIN')">
                   <button (click)="handelDeleteProduct(products)"
                     class="btn btn-danger">
                     <i class="bi bi-trash"></i></button>
